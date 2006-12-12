@@ -38,3 +38,5 @@ extern struct s_switch_inf *switch_inf; /* [0..det_routing_arch.num_switch-1] */
 #ifdef SPEC_CPU2000
 extern FILE *cost_fp;
 #endif
+
+extern double try_swap_time;

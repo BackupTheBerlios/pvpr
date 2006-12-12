@@ -153,7 +153,7 @@ static float comp_width (struct s_chan *chan, float x, float separation);
 
 /*****************************************************************************/
 
-void place_and_route (int operation, struct s_placer_opts
+double place_and_route (int operation, struct s_placer_opts
    placer_opts, char *place_file, char *net_file, char *arch_file,
    char *route_file, boolean full_stats, boolean verify_binary_search,
    struct s_annealing_sched annealing_sched, struct s_router_opts router_opts,
@@ -426,7 +426,6 @@ static void try_place (struct s_placer_opts placer_opts,
  * determines which cost function is used.  num_regions is used only     *
  * the place_cost_type is NONLINEAR_CONG.                                */
  time_t swap_start, swap_end;
- double try_swap_time = 0;
  int tot_iter, inner_iter, success_sum, pins_on_block[3];
  int move_lim, i, moves_since_cost_recompute, width_fac;
  float t, cost, success_rat, rlim, new_cost;
