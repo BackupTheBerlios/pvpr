@@ -85,7 +85,7 @@ int **net_rr_terminals;                  /* [0..num_nets-1][0..num_pins-1]. */
 struct s_switch_inf *switch_inf;      /* [0..det_routing_arch.num_switch-1] */
 
 static time_t start, end, start_place, end_place; //Tracking execution time
-static double try_swap_time = 0;
+extern double try_swap_time = 0;
 
 
 
@@ -203,8 +203,8 @@ int main (int argc, char *argv[]) {
  time(&end);
  
  fprintf(stderr, "Overall execution time: %f\n", difftime(end, start));
- fprintf(stderr, "   Placement/Routing: %f\n", difftime(place_end,start_end));
- 
+ fprintf(stderr, "   Placement/Routing: %f\n", difftime(end_place,start_place));
+ fprintf(stderr, "   Time in try_swap(): %f\n", try_swap_time);
     
  exit (0);
 }
