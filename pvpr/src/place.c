@@ -425,7 +425,6 @@ static void try_place (struct s_placer_opts placer_opts,
  * greater bias for anisotropic architectures.  Place_cost_type          *
  * determines which cost function is used.  num_regions is used only     *
  * the place_cost_type is NONLINEAR_CONG.                                */
- time_t swap_start, swap_end;
  int tot_iter, inner_iter, success_sum, pins_on_block[3];
  int move_lim, i, moves_since_cost_recompute, width_fac;
  float t, cost, success_rat, rlim, new_cost;
@@ -505,7 +504,6 @@ static void try_place (struct s_placer_opts placer_opts,
     success_sum = 0;
 
     for (inner_iter=0; inner_iter < move_lim; inner_iter++) {
-	     time(&swap_start);
        if (try_swap(t, &cost, rlim, pins_on_block, placer_opts.place_cost_type,
              old_region_occ_x, old_region_occ_y, placer_opts.num_regions,
              fixed_pins) == 1) {
@@ -513,8 +511,6 @@ static void try_place (struct s_placer_opts placer_opts,
           av_cost += cost;
           sum_of_squares += cost * cost;
        }
-       time(&swap_end);
-       try_swap_time += difftime(swap_end,swap_start);
 #ifdef VERBOSE
        printf("t = %f  cost = %f   move = %d\n",t, cost, inner_iter);
        if (fabs(cost - comp_cost(CHECK, placer_opts.place_cost_type, 
@@ -579,7 +575,6 @@ static void try_place (struct s_placer_opts placer_opts,
  success_sum = 0;
 
  for (inner_iter=0; inner_iter < move_lim; inner_iter++) {
-	 time(&swap_start);
     if (try_swap(t, &cost, rlim, pins_on_block, placer_opts.place_cost_type, 
           old_region_occ_x, old_region_occ_y, placer_opts.num_regions,
           fixed_pins) == 1) {
@@ -587,8 +582,6 @@ static void try_place (struct s_placer_opts placer_opts,
        av_cost += cost;
        sum_of_squares += cost * cost;
     }
-    time(&swap_end);
-    try_swap_time += difftime(swap_end,swap_start);
 #ifdef VERBOSE 
        printf("t = %f  cost = %f   move = %d\n",t, cost, tot_iter);
 #endif
@@ -813,7 +806,9 @@ static int try_swap (float t, float *cost, float rlim, int *pins_on_block,
  static struct s_bb *bb_edge_new = NULL;
  static int *nets_to_update = NULL, *net_block_moved = NULL;
 
-
+ time_t swap_start, swap_end;
+ 
+ time(&swap_start);
 /* Allocate the local bb_coordinate storage, etc. only once. */
 
  if (bb_coord_new == NULL) {
@@ -1034,6 +1029,9 @@ static int try_swap (float t, float *cost, float rlim, int *pins_on_block,
  }
  
  return(keep_switch);
+ time(&swap_end);
+ try_swap_time += difftime(swap_end,swap_start);
+
 }
 
 
