@@ -84,8 +84,8 @@ int **net_rr_terminals;                  /* [0..num_nets-1][0..num_pins-1]. */
  * (part of routing architecture, but loaded in read_arch.c          */
 struct s_switch_inf *switch_inf;      /* [0..det_routing_arch.num_switch-1] */
 
-static time_t start, end, start_place, end_place; //Tracking execution time
-extern double try_swap_time = 0;
+time_t start, end, start_place, end_place; //Tracking execution time
+double try_swap_time = 0;
 
 
 
@@ -185,9 +185,9 @@ int main (int argc, char *argv[]) {
  //Tracking timing of starting placement/routing
  time(&start_place);
  
- place_and_route (operation, placer_opts, place_file, net_file, arch_file,
-    route_file, full_stats, verify_binary_search, annealing_sched, router_opts,
-    det_routing_arch, segment_inf, timing_inf);
+ try_swap_time = place_and_route (operation, placer_opts, place_file, net_file, 
+    arch_file, route_file, full_stats, verify_binary_search, annealing_sched, 
+    router_opts, det_routing_arch, segment_inf, timing_inf);
 
  //Tracking timing of ending placement/routing
  time(&end_place);
