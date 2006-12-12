@@ -85,7 +85,6 @@ int **net_rr_terminals;                  /* [0..num_nets-1][0..num_pins-1]. */
 struct s_switch_inf *switch_inf;      /* [0..det_routing_arch.num_switch-1] */
 
 time_t start, end, start_place, end_place; //Tracking execution time
-double try_swap_time = 0;
 
 
 
