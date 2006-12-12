@@ -153,7 +153,7 @@ static float comp_width (struct s_chan *chan, float x, float separation);
 
 /*****************************************************************************/
 
-double place_and_route (int operation, struct s_placer_opts
+void place_and_route (int operation, struct s_placer_opts
    placer_opts, char *place_file, char *net_file, char *arch_file,
    char *route_file, boolean full_stats, boolean verify_binary_search,
    struct s_annealing_sched annealing_sched, struct s_router_opts router_opts,
