@@ -84,7 +84,7 @@ int **net_rr_terminals;                  /* [0..num_nets-1][0..num_pins-1]. */
  * (part of routing architecture, but loaded in read_arch.c          */
 struct s_switch_inf *switch_inf;      /* [0..det_routing_arch.num_switch-1] */
 
-time_t start, end, start_place, end_place; //Tracking execution time
+double try_swap_time = 0;
 
 
 
@@ -140,6 +140,8 @@ int main (int argc, char *argv[]) {
  t_timing_inf timing_inf;
 
  //Track overall execution start time
+ time_t start, end, start_place, end_place; //Tracking execution time
+ double overall_time, place_time;
  try_swap_time = 0;
  time(&start);
  
@@ -202,9 +204,14 @@ int main (int argc, char *argv[]) {
  //Tracking timing of ending execution
  time(&end);
  
- fprintf(stderr, "Overall execution time: %f\n", difftime(end, start));
- fprintf(stderr, "   Placement/Routing: %f\n", difftime(end_place,start_place));
- fprintf(stderr, "   Time in try_swap(): %f\n", try_swap_time);
+ overall_time = difftime(end,start);
+ place_time = difftime(end_place,start_place);
+ 
+ fprintf(stderr, "Overall execution time: %f\n", overall_time);
+ fprintf(stderr, "   Placement/Routing: %f %2.2f\%\n", place_time,
+    (place_time/overall_time)*100);
+ fprintf(stderr, "   Time in try_swap(): %f %2.2f\%\n", try_swap_time,
+    (try_swap_time/overall_time)*100);
     
  exit (0);
 }
