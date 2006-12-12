@@ -807,8 +807,8 @@ static int try_swap (float t, float *cost, float rlim, int *pins_on_block,
  static int *nets_to_update = NULL, *net_block_moved = NULL;
 
  time_t swap_start, swap_end;
- 
  time(&swap_start);
+ 
 /* Allocate the local bb_coordinate storage, etc. only once. */
 
  if (bb_coord_new == NULL) {
@@ -1028,9 +1028,10 @@ static int try_swap (float t, float *cost, float rlim, int *pins_on_block,
 
  }
  
- return(keep_switch);
  time(&swap_end);
  try_swap_time += difftime(swap_end,swap_start);
+ 
+ return(keep_switch);
 
 }
 
