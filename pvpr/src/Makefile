@@ -12,11 +12,13 @@ NUMBER    = 175
 NAME      = vpr
 EXEBASE   = vpr
 BENCHLANG = C
-SOURCES   = main.c util.c read_netlist.c read_arch.c place.c route.c \
+SOURCES   = main.c util.c read_netlist.c read_arch.c route.c \
 	    draw.c graphics.c stats.c segment_stats.c rr_graph.c \
 	    rr_graph2.c rr_graph_sbox.c rr_graph_util.c \
 	    rr_graph_timing_params.c rr_graph_area.c check_rr_graph.c \
 	    check_route.c hash.c read_place.c
+SOURCES_SEQ = $(SOURCES) place_serial.c
+SOURCES_PAR = $(SOURCES) place.c
 NEED_MATH=yes
 
 # Include standard template for this suite

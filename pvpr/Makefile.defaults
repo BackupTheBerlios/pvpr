@@ -24,8 +24,10 @@ EXT=.none
 #	DEFINES		-- standard definitions for SPEC
 #                          these may be overriden in Makefile.spec
 BENCHMARK     = $(NUMBER).$(NAME)
-FINAL_SOURCES = $(filter-out $(RM_SOURCES),$(SOURCES)) $(EXTRA_SOURCES)
-OBJS          = $(addsuffix $(OBJ),$(basename $(FINAL_SOURCES)))
+FINAL_SOURCES_SEQ = $(filter-out $(RM_SOURCES),$(SOURCES_SEQ)) $(EXTRA_SOURCES)
+FINAL_SOURCES_PAR = $(filter-out $(RM_SOURCES),$(SOURCES_PAR)) $(EXTRA_SOURCES)
+OBJS_SEQ          = $(addsuffix $(OBJ),$(basename $(FINAL_SOURCES_SEQ)))
+OBJS_PAR          = $(addsuffix $(OBJ),$(basename $(FINAL_SOURCES_PAR)))
 
 CC            = cc
 CFLAGS        = $(EXTRA_CFLAGS) $(PORTABILITY) $(CPORTABILITY)
@@ -135,10 +137,13 @@ all: build
 
 # template build target, should work for simple builds
 ifdef ONESTEP
-$(EXEBASE): $(FINAL_SOURCES)
+$(EXEBASE)-par: $(FINAL_SOURCES_PAR)
+	$(LD) $(LDLANGFLAGS) $(LDCOMPFLAGS) $(FDO_LDFLAGS) $^ $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
+$(EXEBASE)-seq: $(FINAL_SOURCES_PAR)
 	$(LD) $(LDLANGFLAGS) $(LDCOMPFLAGS) $(FDO_LDFLAGS) $^ $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
 else
-$(EXEBASE): $(OBJS)
+$(EXEBASE)-par: $(OBJS_PAR)
+$(EXEBASE)-seq: $(OBJS_PAR)
 ifndef NEEDATFILE
 	$(LD) $(LDFLAGS) $(FDO_LDFLAGS) $(LDOPTFLAGS) $^ $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
 else
@@ -194,4 +199,4 @@ clean:
 install: $(EXEBASE)
 	$(CP) $(EXEBASE) ../../exe/$(EXEBASE)_$(TUNE).$(EXT)
 
-build: $(EXTRA_TARGETS) $(EXEBASE)
+build: $(EXTRA_TARGETS)-par $(EXEBASE)
