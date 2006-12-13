@@ -136,20 +136,26 @@ LDLANGFLAGS = $($(BENCHLANG)LDFLAGS) $(FDO_LD$(BENCHLANG)FLAGS)
 all: build
 
 # template build target, should work for simple builds
-ifdef ONESTEP
-$(EXEBASE)-par: $(FINAL_SOURCES_PAR)
-	$(LD) $(LDLANGFLAGS) $(LDCOMPFLAGS) $(FDO_LDFLAGS) $^ $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
-$(EXEBASE)-seq: $(FINAL_SOURCES_PAR)
-	$(LD) $(LDLANGFLAGS) $(LDCOMPFLAGS) $(FDO_LDFLAGS) $^ $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
-else
+#ifdef ONESTEP
+#$(EXEBASE)-par: $(FINAL_SOURCES_PAR)
+#	$(LD) $(LDLANGFLAGS) $(LDCOMPFLAGS) $(FDO_LDFLAGS) $^ $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
+#$(EXEBASE)-seq: $(FINAL_SOURCES_SEQ)
+#	$(LD) $(LDLANGFLAGS) $(LDCOMPFLAGS) $(FDO_LDFLAGS) $^ $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
+#else
 $(EXEBASE)-par: $(OBJS_PAR)
-$(EXEBASE)-seq: $(OBJS_PAR)
 ifndef NEEDATFILE
 	$(LD) $(LDFLAGS) $(FDO_LDFLAGS) $(LDOPTFLAGS) $^ $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
 else
 	$(LD) $(LDFLAGS) $(FDO_LDFLAGS) $(LDOPTFLAGS) @objectnames $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
 endif
+
+$(EXEBASE)-seq: $(OBJS_SEQ)
+ifndef NEEDATFILE
+	$(LD) $(LDFLAGS) $(FDO_LDFLAGS) $(LDOPTFLAGS) $^ $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
+else
+	$(LD) $(LDFLAGS) $(FDO_LDFLAGS) $(LDOPTFLAGS) @objectnames $(OS_LIBS) $(LIBS) $(MATH_LIBS) $(EXTRA_LIBS) $(LDOPT)
 endif
+#endif
 
 options:
 ifdef ONESTEP
@@ -193,10 +199,12 @@ endif
 .PHONY: fdoclean clean install
 fdoclean:
 	$(RMRF) $(EXEBASE) $(EXEBASE).exe *$(OBJ) $(EXTRA_RMFILES) objectnames
-clean:
+clean-all:
 	-$(RMRF) $(EXEBASE) $(EXEBASE).exe *$(OBJ) $(EXTRA_RMFILES) core *.err *.out objectnames
+clean:
+	-$(RMRF) *$(OBJ) $(EXTRA_RMFILES) core *.err *.out objectnames
 
 install: $(EXEBASE)
 	$(CP) $(EXEBASE) ../../exe/$(EXEBASE)_$(TUNE).$(EXT)
 
-build: $(EXTRA_TARGETS)-par $(EXEBASE)
+build: $(EXTRA_TARGETS) $(EXEBASE)-par
