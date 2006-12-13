@@ -805,9 +805,6 @@ static int try_swap (float t, float *cost, float rlim, int *pins_on_block,
  static struct s_bb *bb_coord_new = NULL;
  static struct s_bb *bb_edge_new = NULL;
  static int *nets_to_update = NULL, *net_block_moved = NULL;
-
- time_t swap_start, swap_end;
- time(&swap_start);
  
 /* Allocate the local bb_coordinate storage, etc. only once. */
 
@@ -820,7 +817,6 @@ static int try_swap (float t, float *cost, float rlim, int *pins_on_block,
     net_block_moved = (int *) my_malloc (2 * pins_per_clb * sizeof (int));
  }
 
-    
  b_from = my_irand(num_blocks - 1);
 
 /* If the pins are fixed we never move them from their initial    *
@@ -1027,9 +1023,6 @@ static int try_swap (float t, float *cost, float rlim, int *pins_on_block,
     }
 
  }
- 
- time(&swap_end);
- try_swap_time += difftime(swap_end,swap_start);
  
  return(keep_switch);
 
