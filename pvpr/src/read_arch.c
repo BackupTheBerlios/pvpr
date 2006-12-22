@@ -1291,7 +1291,6 @@ static void check_arch (char *arch_file, enum e_route_type route_type,
  t_chan chan_x_dist, chan_y_dist;
 
  fatal = 0;
-         printf("*** %d\n",chan_width_dist.chan_x_dist.type);
 
 
 /* NUMINP parameters can be set in the architecture file.  The first      *
@@ -1384,6 +1383,8 @@ static void check_arch (char *arch_file, enum e_route_type route_type,
     chan_width_io = chan_width_dist.chan_width_io;
     chan_x_dist = chan_width_dist.chan_x_dist;
     chan_y_dist = chan_width_dist.chan_y_dist;
+             printf("*** %d\n",chan_x_dist.type);
+
 
     if (chan_x_dist.type != UNIFORM || chan_y_dist.type != UNIFORM || 
          chan_x_dist.peak != chan_y_dist.peak || chan_x_dist.peak != 
