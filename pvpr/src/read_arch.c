@@ -256,6 +256,7 @@ void read_arch (char *arch_file, enum e_route_type route_type,
     }
     if (strcmp(ptr,names[1]) == 0) { /*chan_width_x */
        get_chan(ptr, &(chan_width_dist_ptr->chan_x_dist), 1, fp_arch, buf);
+       printf("*** %d\n",chan_width_dist_ptr->chan_x_dist.type);
        continue;
     }
     if (strcmp(ptr,names[2]) == 0) { /* chan_width_y */
