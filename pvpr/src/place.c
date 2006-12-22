@@ -164,9 +164,6 @@ static void update_t (float *t, float std_dev, float rlim, float success_rat,
 
 static void update_rlim (float *rlim, float success_rat);
 
-static int exit_crit (float t, float cost, struct s_annealing_sched
-       annealing_sched);
-
 static int count_connections(void);
 
 static void compute_net_pin_index_values(void);
@@ -255,53 +252,6 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
  
  remember_net_delay_original_ptr = NULL; /*prevents compiler warning*/
 
- if (placer_opts.place_algorithm == NET_TIMING_DRIVEN_PLACE ||
-     placer_opts.place_algorithm == PATH_TIMING_DRIVEN_PLACE ||
-     placer_opts.enable_timing_computations) {
-   /*do this before the initial placement to avoid messing up the initial placement */
-     alloc_lookups_and_criticalities(chan_width_dist,
-				     router_opts, 
-				     det_routing_arch, 
-				     segment_inf,
-				     timing_inf, 
-				     *subblock_data_ptr,
-				     &net_delay, &net_slack);
-
-     remember_net_delay_original_ptr = net_delay;
-
-/*#define PRINT_LOWER_BOUND*/
-#ifdef PRINT_LOWER_BOUND
-     /*print the crit_path, assuming delay between blocks that are*
-      *block_dist apart*/
-
-     if (placer_opts.block_dist <= nx)
-       place_delay_value = delta_clb_to_clb[placer_opts.block_dist][0];
-     else if (placer_opts.block_dist <= ny)
-       place_delay_value = delta_clb_to_clb[0][placer_opts.block_dist];
-     else
-       place_delay_value = delta_clb_to_clb[nx][ny];
-
-     printf("\nLower bound assuming delay of %g\n", place_delay_value);
-
-     load_constant_net_delay (net_delay, place_delay_value);
-     load_timing_graph_net_delays(net_delay);
-     d_max = load_net_slack(net_slack, 0);
-
-     print_critical_path("Placement_Lower_Bound.echo");
-     print_sink_delays("Placement_Lower_Bound_Sink_Delays.echo");
-
-     /*also print sink delays assuming 0 delay between blocks, 
-       this tells us how much logic delay is on each path*/
-
-     load_constant_net_delay (net_delay, 0);
-     load_timing_graph_net_delays(net_delay);
-     d_max = load_net_slack(net_slack, 0);
-
-     print_sink_delays("Placement_Logic_Sink_Delays.echo");
-#endif
-
- }
-
  width_fac = placer_opts.place_chan_width;
  if (placer_opts.pad_loc_type == FREE)
     fixed_pins = FALSE;
@@ -388,108 +338,7 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
    cost, bb_cost, timing_cost, delay_cost, d_max, width_fac);
  update_screen(MAJOR, msg, PLACEMENT, FALSE);
 
- while (exit_crit(t, cost, annealing_sched) == 0) {
-
-/*
-   if (placer_opts.place_algorithm == NET_TIMING_DRIVEN_PLACE ||
-       placer_opts.place_algorithm == PATH_TIMING_DRIVEN_PLACE) {
-     cost = 1;
-   }
-*/
-   
-    av_cost = 0.;
-    av_bb_cost = 0.;
-    av_delay_cost = 0.;
-    av_timing_cost = 0.;
-    sum_of_squares = 0.;
-    success_sum = 0;
-
-    inner_crit_iter_count = 1;
-
-    for (inner_iter=0; inner_iter < move_lim; inner_iter++) {
-      if (try_swap(t, &cost, &bb_cost, &timing_cost, 
-	     rlim, pins_on_block, placer_opts.place_cost_type,
-             old_region_occ_x, old_region_occ_y, placer_opts.num_regions,
-             fixed_pins, placer_opts.place_algorithm, 
-	     placer_opts.timing_tradeoff, inverse_prev_bb_cost, 
-	     inverse_prev_timing_cost, &delay_cost) == 1) {
-	success_sum++;
-	av_cost += cost;
-	av_bb_cost += bb_cost;
-	av_timing_cost += timing_cost;
-	av_delay_cost += delay_cost;
-	sum_of_squares += cost * cost;
-      }
-
-#ifdef VERBOSE
-      printf("t = %g  cost = %g   bb_cost = %g timing_cost = %g move = %d dmax = %g\n",
-	     t, cost, bb_cost, timing_cost, inner_iter, d_max);
-      if (fabs(bb_cost - comp_bb_cost(CHECK, placer_opts.place_cost_type, 
-				      placer_opts.num_regions)) > bb_cost * ERROR_TOL) 
-	exit(1);
-#endif 
-    }
-
-/* Lines below prevent too much round-off error from accumulating *
- * in the cost over many iterations.  This round-off can lead to  *
- * error checks failing because the cost is different from what   *
- * you get when you recompute from scratch.                       */
- 
-    moves_since_cost_recompute += move_lim;
-    if (moves_since_cost_recompute > MAX_MOVES_BEFORE_RECOMPUTE) {
-       new_bb_cost = recompute_bb_cost (placer_opts.place_cost_type, 
-                     placer_opts.num_regions);       
-       if (fabs(new_bb_cost - bb_cost) > bb_cost * ERROR_TOL) {
-          printf("Error in try_place:  new_bb_cost = %g, old bb_cost = %g.\n",
-              new_bb_cost, bb_cost);
-          exit (1);
-       }
-       bb_cost = new_bb_cost;
-
-       if (placer_opts.place_algorithm ==BOUNDING_BOX_PLACE) {
-	 cost = new_bb_cost;
-       }
-       moves_since_cost_recompute = 0;
-    }
-
-    tot_iter += move_lim;
-    success_rat = ((float) success_sum)/ move_lim;
-    if (success_sum == 0) {
-       av_cost = cost;
-       av_bb_cost = bb_cost;
-       av_timing_cost = timing_cost;
-       av_delay_cost = delay_cost;
-    }
-    else {
-       av_cost /= success_sum;
-       av_bb_cost /= success_sum;
-       av_timing_cost /= success_sum;
-       av_delay_cost /= success_sum;
-    }
-    std_dev = get_std_dev (success_sum, sum_of_squares, av_cost);
-
-#ifndef SPEC
-    printf("%11.5g  %10.6g %11.6g  %11.6g  %11.6g %11.6g %11.4g %9.4g %8.3g  %7.4g  %7.4g  %10d  ",t, av_cost, 
-	   av_bb_cost, av_timing_cost, av_delay_cost, place_delay_value, d_max, success_rat, std_dev, 
-	   rlim, crit_exponent,tot_iter);
-#endif
-
-    oldt = t;  /* for finding and printing alpha. */
-    update_t (&t, std_dev, rlim, success_rat, annealing_sched);
-
-#ifndef SPEC
-    printf("%7.4g\n",t/oldt);
-#endif
-
-    sprintf(msg,"Cost: %g  BB Cost %g  TD Cost %g  Temperature: %g  d_max: %g",cost, 
-	    bb_cost, timing_cost, t, d_max);
-    update_screen(MINOR, msg, PLACEMENT, FALSE);
-    update_rlim (&rlim, success_rat);
-
-#ifdef VERBOSE 
- dump_clbs();
-#endif
- }
+/* CAME FROM HERE */
 
  t = 0;   /* freeze out */
  av_cost = 0.;
@@ -731,7 +580,7 @@ static void update_t (float *t, float std_dev, float rlim,
 }
 
 
-static int exit_crit (float t, float cost, struct s_annealing_sched 
+int exit_crit (float t, float cost, struct s_annealing_sched 
          annealing_sched) {
 
 /* Return 1 when the exit criterion is met.                        */

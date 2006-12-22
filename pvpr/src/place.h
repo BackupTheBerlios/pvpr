@@ -12,3 +12,6 @@ void read_place (char *place_file, char *net_file, char *arch_file,
 		 struct s_det_routing_arch det_routing_arch, 
 		 t_segment_inf *segment_inf,
 		 t_timing_inf timing_inf, t_subblock_data *subblock_data_ptr);
+
+int exit_crit (float t, float cost, struct s_annealing_sched 
+         annealing_sched);
