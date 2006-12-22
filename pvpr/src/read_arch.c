@@ -255,11 +255,11 @@ void read_arch (char *arch_file, enum e_route_type route_type,
        continue;
     }
     if (strcmp(ptr,names[1]) == 0) { /*chan_width_x */
-       get_chan(ptr, &chan_width_dist_ptr->chan_x_dist, 1, fp_arch, buf);
+       get_chan(ptr, &(chan_width_dist_ptr->chan_x_dist), 1, fp_arch, buf);
        continue;
     }
     if (strcmp(ptr,names[2]) == 0) { /* chan_width_y */
-       get_chan(ptr, &chan_width_dist_ptr->chan_y_dist, 2, fp_arch, buf);
+       get_chan(ptr, &(chan_width_dist_ptr->chan_y_dist), 2, fp_arch, buf);
        continue;
     }
     if (strcmp(ptr,names[3]) == 0) { /* chan_width_io */
@@ -1222,7 +1222,6 @@ static void get_chan (char *ptr, t_chan *chan, int inp_num, FILE *fp_arch,
 /* This routine parses a channel functional description line.  chan  *
  * is the channel data structure to be loaded, while inp_num is the  *
  * type of input line being parsed.                                  */
- printf("*** %s\n",ptr);
  ptr = my_strtok(NULL,TOKENS,fp_arch,buf);
  if (ptr == NULL) {
     printf("Error:  missing %s value on line %d.\n",
@@ -1233,7 +1232,6 @@ static void get_chan (char *ptr, t_chan *chan, int inp_num, FILE *fp_arch,
  if (strcmp(ptr,"uniform") == 0) {
     isread[inp_num]++;
     chan->type = UNIFORM;
-    printf("*** %d\n",chan->type);
     chan->peak = get_float(ptr,inp_num,0.,1., fp_arch, buf);
     chan->dc = OPEN;
     chan->width = OPEN;
