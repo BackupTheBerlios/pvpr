@@ -1229,7 +1229,7 @@ static void get_chan (char *ptr, t_chan *chan, int inp_num, FILE *fp_arch,
        names[inp_num],linenum);
     exit(1);
  }
-printf("***\n%s\n***\n",ptr);
+printf("***\n%s %d\n***\n",ptr,strcmp(ptr,"uniform"));
  if (strcmp(ptr,"uniform") == 0) {
     isread[inp_num]++;
     chan->type = UNIFORM;

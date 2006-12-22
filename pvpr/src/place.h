@@ -15,3 +15,4 @@ void read_place (char *place_file, char *net_file, char *arch_file,
 
 int exit_crit (float t, float cost, struct s_annealing_sched 
          annealing_sched);
+         
