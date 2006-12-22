@@ -418,8 +418,6 @@ void read_arch (char *arch_file, enum e_route_type route_type,
        *timing_inf_ptr, subblock_data_ptr->max_subblocks_per_block,
        *chan_width_dist_ptr);
        
-        printf("*** %d\n",chan_width_dist_ptr->chan_x_dist.type);
-       printf("*** %d\n",(*chan_width_dist_ptr).chan_x_dist.type);
  fclose (fp_arch);
 }
 
@@ -1293,6 +1291,8 @@ static void check_arch (char *arch_file, enum e_route_type route_type,
  t_chan chan_x_dist, chan_y_dist;
 
  fatal = 0;
+         printf("*** %d\n",chan_width_dist.chan_x_dist.type);
+
 
 /* NUMINP parameters can be set in the architecture file.  The first      *
  * NUM_REQUIRED are always mandatory.  The next NUM_DETAILED ones are     *
