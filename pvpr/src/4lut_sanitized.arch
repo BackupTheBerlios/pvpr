@@ -15,7 +15,7 @@
 # Uniform channels.  Each pin appears on only one side.
 io_rat 2
 chan_width_io 1
-chan_width_x uniform 1 
+chan_width_x uniform 1
 chan_width_y uniform 1
 
 # 4-input LUT.  LUT inputs first, then output, then clock.
