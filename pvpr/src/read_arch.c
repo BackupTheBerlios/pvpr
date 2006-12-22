@@ -412,12 +412,14 @@ void read_arch (char *arch_file, enum e_route_type route_type,
     load_extra_switch_types (det_routing_arch, timing_inf_ptr);
  }
                
-        printf("*** %d\n",chan_width_dist_ptr->chan_x_dist.type);
-       printf("*** %d\n",(*chan_width_dist_ptr).chan_x_dist.type);
+
 
  check_arch (arch_file, route_type, *det_routing_arch, *segment_inf_ptr,
        *timing_inf_ptr, subblock_data_ptr->max_subblocks_per_block,
        *chan_width_dist_ptr);
+       
+        printf("*** %d\n",chan_width_dist_ptr->chan_x_dist.type);
+       printf("*** %d\n",(*chan_width_dist_ptr).chan_x_dist.type);
  fclose (fp_arch);
 }
 
