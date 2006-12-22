@@ -1222,7 +1222,7 @@ static void get_chan (char *ptr, t_chan *chan, int inp_num, FILE *fp_arch,
 /* This routine parses a channel functional description line.  chan  *
  * is the channel data structure to be loaded, while inp_num is the  *
  * type of input line being parsed.                                  */
-
+ printf("*** %s\n",ptr);
  ptr = my_strtok(NULL,TOKENS,fp_arch,buf);
  if (ptr == NULL) {
     printf("Error:  missing %s value on line %d.\n",
