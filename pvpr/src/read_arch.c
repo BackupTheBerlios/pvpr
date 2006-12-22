@@ -1233,6 +1233,7 @@ static void get_chan (char *ptr, t_chan *chan, int inp_num, FILE *fp_arch,
  if (strcmp(ptr,"uniform") == 0) {
     isread[inp_num]++;
     chan->type = UNIFORM;
+    printf("*** %d\n",chan->type);
     chan->peak = get_float(ptr,inp_num,0.,1., fp_arch, buf);
     chan->dc = OPEN;
     chan->width = OPEN;
