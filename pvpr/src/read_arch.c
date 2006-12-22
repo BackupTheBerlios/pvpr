@@ -1478,13 +1478,13 @@ void print_arch (char *arch_file, enum e_route_type route_type,
 
  fprintf(fp,"\nchan_width_x:\n");
  fprintf(fp,"type: %d  peak: %g  width: %g  xpeak: %g  dc: %g\n",
-   chan_x_dist.type, chan_x_dist.peak, chan_x_dist.width, 
-     chan_x_dist.xpeak, chan_x_dist.dc);
+   chan_width_dist.chan_x_dist.type, chan_width_dist.chan_x_dist.peak, chan_width_dist.chan_x_dist.width, 
+     chan_width_dist.chan_x_dist.xpeak, chan_width_dist.chan_x_dist.dc);
 
  fprintf(fp,"\nchan_width_y:\n");
  fprintf(fp,"type: %d  peak: %g  width: %g  xpeak: %g  dc: %g\n\n",
-   chan_y_dist.type, chan_y_dist.peak, chan_y_dist.width, 
-     chan_y_dist.xpeak, chan_y_dist.dc);
+   chan_width_dist.chan_y_dist.type, chan_width_dist.chan_y_dist.peak, chan_width_dist.chan_y_dist.width, 
+     chan_width_dist.chan_y_dist.xpeak, chan_width_dist.chan_y_dist.dc);
 
  fprintf(fp,"Pin #\tclass\ttop\tbottom\tleft\tright\tglobal");
  for (i=0;i<pins_per_clb;i++) {
