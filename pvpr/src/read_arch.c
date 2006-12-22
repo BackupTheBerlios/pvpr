@@ -1229,7 +1229,7 @@ static void get_chan (char *ptr, t_chan *chan, int inp_num, FILE *fp_arch,
        names[inp_num],linenum);
     exit(1);
  }
-printf("***\n%s %d\n***\n",ptr,strcmp(ptr,"uniform"));
+
  if (strcmp(ptr,"uniform") == 0) {
     isread[inp_num]++;
     chan->type = UNIFORM;
@@ -1384,6 +1384,9 @@ static void check_arch (char *arch_file, enum e_route_type route_type,
     if (chan_x_dist.type != UNIFORM || chan_y_dist.type != UNIFORM || 
          chan_x_dist.peak != chan_y_dist.peak || chan_x_dist.peak != 
          chan_width_io) {
+	     printf("%d %d %d %d\n",chan_x_dist.type != UNIFORM, chan_y_dist.type != UNIFORM, 
+         chan_x_dist.peak != chan_y_dist.peak, chan_x_dist.peak != 
+         chan_width_io);
        printf("Error in check_arch:  detailed routing currently only\n"
              "supported on FPGAs with all channels of equal width.\n");
        fatal = 1;
