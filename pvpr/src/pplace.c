@@ -1273,8 +1273,6 @@ void free_context (struct pcontext *context)
 	}
 	*/
 	
-	free(context->pins_on_block);
-	
 	for (i=0; i<num_blocks; i++) {
 		free(context->block[i].name);
 		free(context->block[i].nets);
