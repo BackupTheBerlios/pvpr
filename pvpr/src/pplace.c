@@ -1003,6 +1003,8 @@ void copy_context (struct pcontext *arr, struct pcontext *context, int n) {
 			arr[cont].clb[i][j].type = context->clb[i][j].type;
 			arr[cont].clb[i][j].occ = context->clb[i][j].occ;
 			arr[cont].clb[i][j].u.block = context->clb[i][j].u.block;
+			
+
 			for (k=0; k<clb[i][j].occ; k++) {
 				arr[cont].clb[i][j].u.io_blocks[k] = context->clb[i][j].u.io_blocks[k];
 			}
@@ -1149,8 +1151,10 @@ void alloc_context (struct pcontext *context, float update_freq,
 			context->clb[i][j].type = clb[i][j].type;
 			context->clb[i][j].occ = clb[i][j].occ;
 			context->clb[i][j].u.block = clb[i][j].u.block;
-			for (k=0; k<clb[i][j].occ; k++) {
-				context->clb[i][j].u.io_blocks[k] = clb[i][j].u.io_blocks[k];
+			if (clb[i][j].type == IO) {
+				for (k=0; k<clb[i][j].occ; k++) {
+					context->clb[i][j].u.io_blocks[k] = clb[i][j].u.io_blocks[k];
+				}
 			}
 		}
 	}
@@ -1220,8 +1224,12 @@ void restore_context (struct pcontext *context, float *cost, float *bb_cost, flo
 		for (j=0; i<=ny+1; j++) {
 			clb[i][j].occ = context->clb[i][j].occ;
 			clb[i][j].u.block = context->clb[i][j].u.block;
-			for (k=0; k<clb[i][j].occ; k++) {
-				clb[i][j].u.io_blocks[k] = context->clb[i][j].u.io_blocks[k];
+			clb[i][j].type = context->clb[i][j].type;
+			
+			if (clb[i][j].type == IO) {
+				for (k=0; k<clb[i][j].occ; k++) {
+					clb[i][j].u.io_blocks[k] = context->clb[i][j].u.io_blocks[k];
+				}
 			}
 		}
 	}
