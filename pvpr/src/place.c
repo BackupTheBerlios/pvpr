@@ -221,7 +221,7 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
  * determines which cost function is used.  num_regions is used only     *
  * the place_cost_type is NONLINEAR_CONG.                                */
 
-
+ int i;
  int tot_iter, inner_iter, success_sum, pins_on_block[3];
  int move_lim, moves_since_cost_recompute, width_fac;
  float t,  success_rat, rlim, d_max, est_crit;
