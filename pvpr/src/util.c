@@ -522,7 +522,7 @@ void my_srandom (int seed) {
  current_random = (unsigned int) seed;
 }
 
-void fill_rand_buf (unsigned int rand_buf[], int &first_rand) {
+void fill_rand_buf (unsigned int rand_buf[], int *first_rand) {
 	int i;
 	pthread_mutex_lock(&rand_lock);
 	for (i=0; i<RAND_BUF_SIZE; i++) {
