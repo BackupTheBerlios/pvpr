@@ -1,5 +1,5 @@
-#include "vpr_types.h"
-
+struct s_placer_opts;
+struct s_annealing_sched;
 struct pcontext;
 
 void *parallel_place (void *);

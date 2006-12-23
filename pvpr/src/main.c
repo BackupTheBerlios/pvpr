@@ -17,6 +17,7 @@
 
              /********** Netlist to be mapped stuff ****************/
 int num_threads;
+float update_freq;
 int num_nets, num_blocks;
 int num_p_inputs, num_p_outputs, num_clbs, num_globals;
 struct s_net *net;
@@ -139,6 +140,7 @@ int main (int argc, char *argv[]) {
  float constant_net_delay;
 
  num_threads = 4;
+ update_freq = 1;
  printf("%s",title);
 
  placer_opts.pad_loc_file = pad_loc_file;
