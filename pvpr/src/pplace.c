@@ -1004,9 +1004,10 @@ void copy_context (struct pcontext *arr, struct pcontext *context, int n) {
 			arr[cont].clb[i][j].occ = context->clb[i][j].occ;
 			arr[cont].clb[i][j].u.block = context->clb[i][j].u.block;
 			
-
-			for (k=0; k<clb[i][j].occ; k++) {
-				arr[cont].clb[i][j].u.io_blocks[k] = context->clb[i][j].u.io_blocks[k];
+			if (context->clb[i][j].type == IO) {
+				for (k=0; k<clb[i][j].occ; k++) {
+					arr[cont].clb[i][j].u.io_blocks[k] = context->clb[i][j].u.io_blocks[k];
+				}
 			}
 		}
 	}
