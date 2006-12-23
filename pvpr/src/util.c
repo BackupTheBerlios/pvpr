@@ -534,7 +534,7 @@ void fill_rand_buf (unsigned int rand_buf[], int *first_rand) {
 	*first_rand = 0;
 }
 
-float my_frand (struct pcontext *context) {
+float p_my_frand (struct pcontext *context) {
  
 /* Creates a random float between 0 and 1.  i.e. [0..1).        */ 
  

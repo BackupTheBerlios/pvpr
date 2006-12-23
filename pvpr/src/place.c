@@ -328,7 +328,7 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
  threads = (pthread_t *) my_malloc(sizeof(pthread_t)*num_threads);
  contexts = (struct pcontext *) my_malloc(sizeof(struct pcontext) * num_threads);
  for (i=0; i<num_threads; i++) {
-	 alloc_context(&(contexts[i]), update_freq, inverse_prev_bb_cost, inverse_prev_timing_cost, &annealing_sched, &placer_opts, net_cost, temp_net_cost, update_freq, cost, bb_cost, timing_cost, delay_cost, rlim);
+	 alloc_context(&(contexts[i]), update_freq, inverse_prev_bb_cost, inverse_prev_timing_cost, &annealing_sched, &placer_opts, net_cost, temp_net_cost, cost, bb_cost, timing_cost, delay_cost, rlim);
  }
  
  barrier_init(&barrier, num_threads);

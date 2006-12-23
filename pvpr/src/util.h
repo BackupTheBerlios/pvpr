@@ -96,7 +96,7 @@ int my_atoi (const char *str);
 /*********************** Portable random number generators *******************/
 
 void my_srandom (int seed);
-void fill_rand_buf (unsigned int rand_buf[], unsigned int *first_rand);
+void fill_rand_buf (unsigned int rand_buf[], int *first_rand);
 int p_my_irand (struct pcontext *context, int imax);
 int p_my_frand (struct pcontext *context);
 int my_irand (int imax);
