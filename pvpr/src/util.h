@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "pplace.h"
 
 /*************** Global variables exported by this module ********************/
 
