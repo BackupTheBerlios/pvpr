@@ -61,7 +61,7 @@ FLAGS = $(OPT_FLAGS) $(DEBUG_FLAGS)
 #DEBUG_FLAGS = -Aa -g
 #OPT_FLAGS = -Aa +O3
 
-EXE = vpr
+EXE = pvpr
 
 OBJ = main.o util.o read_netlist.o print_netlist.o check_netlist.o read_arch.o place_and_route.o barrier.o place.o pplace.o route_common.o route_timing.o route_tree_timing.o route_breadth_first.o draw.o graphics.o stats.o segment_stats.o rr_graph.o rr_graph2.o rr_graph_sbox.o rr_graph_util.o rr_graph_timing_params.o rr_graph_indexed_data.o rr_graph_area.o check_rr_graph.o check_route.o hash.o heapsort.o read_place.o net_delay.o path_delay.o path_delay2.o vpr_utils.o timing_place_lookup.o timing_place.o
 
