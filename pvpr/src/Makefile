@@ -52,7 +52,7 @@ THREAD_FLAG = -lpthread
 
 #FLAGS = $(WARN_FLAGS)
 #FLAGS = $(DEBUG_FLAGS) 
-FLAGS = $(OPT_FLAGS) $(THREAD_FLAG) $(DEBUG_FLAGS)
+FLAGS = $(OPT_FLAGS) $(DEBUG_FLAGS)
 
 #Uncomment line below if X Windows isn't installed on your system.
 #FLAGS = $(OPT_FLAGS) -DNO_GRAPHICS
@@ -76,7 +76,7 @@ H = util.h vpr_types.h globals.h graphics.h read_netlist.h print_netlist.h check
 # Add purify before $(CC) in the link line below to run purify on VPR.
 
 $(EXE): $(OBJ) test_h.o
-	$(CC) $(FLAGS) $(OBJ) -o $(EXE) $(LIB_DIR) $(LIB)
+	$(CC) $(FLAGS) $(OBJ) -o $(EXE) $(LIB_DIR) $(LIB) $(THREAD_FLAG)
 
 # test_h.c is a dummy file -- it just checks the header files against each
 # other to see if any global variable definitions conflict in the various

@@ -1114,7 +1114,6 @@ void alloc_context (struct pcontext *context, float update_freq,
 	}
 	
 	for (i=0; i<num_blocks; i++) {
-		context->pins_on_block[i] = pins_on_block[i];
 		context->block[i].name = (char *) my_malloc (strlen(block[i].name)*sizeof(char));
 		if (context->block[i].name == NULL) exit(1);
 		strcpy(context->block[i].name, block[i].name);
