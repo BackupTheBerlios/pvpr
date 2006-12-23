@@ -932,13 +932,13 @@ void *parallel_place (void *arg) {
 		}
 		context->std_dev = get_std_dev (context->success_sum, context->sum_of_squares, context->av_cost);
 
-/*
+
 #ifndef SPEC
     printf("%11.5g  %10.6g %11.6g  %11.6g  %11.6g %11.6g %11.4g %9.4g %8.3g  %7.4g  %7.4g  %10d  ",context->t, context->av_cost, 
-	   context->av_bb_cost, context->av_timing_cost, context->av_delay_cost, place_delay_value, d_max, context->success_rat, context->std_dev, 
+	   context->av_bb_cost, context->av_timing_cost, context->av_delay_cost, place_delay_value, context->d_max, context->success_rat, context->std_dev, 
 	   context->rlim, crit_exponent,context->tot_iter);
 #endif
-*/
+
 
 		context->oldt = context->t;  /* for finding and printing alpha. */
 
@@ -948,7 +948,7 @@ void *parallel_place (void *arg) {
     printf("%7.4g\n",context->t/context->oldt);
 #endif
 
-		sprintf(context->msg,"Cost: %g  BB Cost %g  TD Cost %g  Temperature: %g  d_max: %g",context->cost, context->bb_cost, context->timing_cost, context->t, d_max);
+		sprintf(context->msg,"Cost: %g  BB Cost %g  TD Cost %g  Temperature: %g  d_max: %g",context->cost, context->bb_cost, context->timing_cost, context->t, context->d_max);
 //		update_screen(MINOR, msg, PLACEMENT, FALSE);
 		update_rlim (&(context->rlim), context->success_rat);
 
@@ -1052,7 +1052,7 @@ void copy_context (struct pcontext *arr, struct pcontext *context, int n) {
  }
 }
 
-void alloc_context (struct pcontext *context, float update_freq, float inverse_prev_bb_cost, float inverse_prev_timing_cost, struct s_annealing_sched *annealing_sched, struct s_placer_opts *placer_opts, float *net_cost, float *temp_net_cost, float update_freq, float cost, float bb_cost, float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list)
+void alloc_context (struct pcontext *context, float update_freq, float inverse_prev_bb_cost, float inverse_prev_timing_cost, struct s_annealing_sched *annealing_sched, struct s_placer_opts *placer_opts, float *net_cost, float *temp_net_cost, float update_freq, float cost, float bb_cost, float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list, float d_max)
 {
 	int i, j, *index;
 	int num_pins;
@@ -1077,6 +1077,7 @@ void alloc_context (struct pcontext *context, float update_freq, float inverse_p
 		}
 	}
 	*/
+	context->d_max = d_max;
 	context->unique_pin_list = unique_pin_list;
 	context->duplicate_pins = duplicate_pins;
 	context->rlim = rlim;

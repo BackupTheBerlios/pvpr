@@ -47,6 +47,8 @@ struct pcontext {
 	
 	struct s_placer_opts *placer_opts;
 	
+	float place_delay_value, crit_exponent;
+	
 	int inet, outer_crit_iter_count, inner_crit_iter_count, inner_recompute_limit;
 };
 
@@ -57,7 +59,7 @@ void alloc_context (struct pcontext *context, float update_freq,
 	float inverse_prev_bb_cost, float inverse_prev_timing_cost,
 	struct s_annealing_sched *annealing_sched, struct s_placer_opts *placer_opts,
 	float *net_cost, float *temp_net_cost, float cost, float bb_cost,
-	float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list, float d_max);
+	float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list, float d_max, float place_delay_value, float crit_exponent);
 void copy_context (struct pcontext *, struct pcontext *, int);
 void merge_contexts (void *ptr);
 
