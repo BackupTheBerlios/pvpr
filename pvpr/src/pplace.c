@@ -1147,7 +1147,7 @@ void alloc_context (struct pcontext *context, float update_freq,
 	}
 	
 	for (i=0; i<=nx+1; i++) {
-		for (j=0; i<=ny+1; j++) {
+		for (j=0; j<=ny+1; j++) {
 			context->clb[i][j].type = clb[i][j].type;
 			context->clb[i][j].occ = clb[i][j].occ;
 			context->clb[i][j].u.block = clb[i][j].u.block;
