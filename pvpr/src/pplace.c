@@ -935,8 +935,8 @@ void *parallel_place (void *arg) {
 
 #ifndef SPEC
     printf("%11.5g  %10.6g %11.6g  %11.6g  %11.6g %11.6g %11.4g %9.4g %8.3g  %7.4g  %7.4g  %10d  ",context->t, context->av_cost, 
-	   context->av_bb_cost, context->av_timing_cost, context->av_delay_cost, place_delay_value, context->d_max, context->success_rat, context->std_dev, 
-	   context->rlim, crit_exponent,context->tot_iter);
+	   context->av_bb_cost, context->av_timing_cost, context->av_delay_cost, context->place_delay_value, context->d_max, context->success_rat, context->std_dev, 
+	   context->rlim, context->crit_exponent,context->tot_iter);
 #endif
 
 
@@ -1052,7 +1052,7 @@ void copy_context (struct pcontext *arr, struct pcontext *context, int n) {
  }
 }
 
-void alloc_context (struct pcontext *context, float update_freq, float inverse_prev_bb_cost, float inverse_prev_timing_cost, struct s_annealing_sched *annealing_sched, struct s_placer_opts *placer_opts, float *net_cost, float *temp_net_cost, float update_freq, float cost, float bb_cost, float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list, float d_max)
+void alloc_context (struct pcontext *context, float update_freq, float inverse_prev_bb_cost, float inverse_prev_timing_cost, struct s_annealing_sched *annealing_sched, struct s_placer_opts *placer_opts, float *net_cost, float *temp_net_cost, float update_freq, float cost, float bb_cost, float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list, float d_max, float place_delay_value, float crit_exponent)
 {
 	int i, j, *index;
 	int num_pins;
@@ -1077,6 +1077,8 @@ void alloc_context (struct pcontext *context, float update_freq, float inverse_p
 		}
 	}
 	*/
+	context->crit_exponent = crit_exponent;
+	context->place_delay_value = place_delay_value;
 	context->d_max = d_max;
 	context->unique_pin_list = unique_pin_list;
 	context->duplicate_pins = duplicate_pins;

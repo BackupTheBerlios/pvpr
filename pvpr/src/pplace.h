@@ -47,7 +47,7 @@ struct pcontext {
 	
 	struct s_placer_opts *placer_opts;
 	
-	float place_delay_value, crit_exponent;
+	float crit_exponent;
 	
 	int inet, outer_crit_iter_count, inner_crit_iter_count, inner_recompute_limit;
 };
