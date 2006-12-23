@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-#include <stdlib.h>
 #include <pthread.h>
 #include "util.h"
 #include "barrier.h"
@@ -1108,7 +1107,7 @@ void alloc_context (struct pcontext *context, float update_freq,
 	context->placer_opts = placer_opts;
 	
 	context->block = (struct s_block *) my_malloc (num_blocks*sizeof(struct s_block));
-	assert(context->block);
+	if (context->block == NULL) exit(1);
 	
 	for (i=0; i<3; i++) {
 		context->pins_on_block[i] = pins_on_block[i];
@@ -1117,13 +1116,13 @@ void alloc_context (struct pcontext *context, float update_freq,
 	for (i=0; i<num_blocks; i++) {
 		context->pins_on_block[i] = pins_on_block[i];
 		context->block[i].name = (char *) my_malloc (strlen(block[i].name)*sizeof(char));
-		assert(context->block[i].name);
+		if (context->block[i].name == NULL) exit(1);
 		strcpy(context->block[i].name, block[i].name);
 		context->block[i].type = block[i].type;
 		context->block[i].x = block[i].x;
 		context->block[i].y = block[i].y;
 		context->block[i].nets = (int *) my_malloc (pins_per_clb * sizeof(int));
-		assert(context->block[i].nets);
+		if (context->block[i].nets == NULL) exit(1);
 		for (j=0; j<pins_per_clb; j++) {
 			context->block[i].nets[j] = block[i].nets[j];
 		}

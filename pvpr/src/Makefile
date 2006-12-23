@@ -48,10 +48,11 @@ X11_INCLUDE = -I/usr/openwin/include
 WARN_FLAGS = -Wall -Wpointer-arith -Wcast-qual -Wstrict-prototypes -O -D__USE_FIXED_PROTOTYPES__ -ansi -pedantic -Wmissing-prototypes -Wshadow -Wcast-align -D_POSIX_SOURCE
 DEBUG_FLAGS = -g
 OPT_FLAGS = -O3
+THREAD_FLAG = -lpthread
 
 #FLAGS = $(WARN_FLAGS)
 #FLAGS = $(DEBUG_FLAGS) 
-FLAGS = $(OPT_FLAGS)
+FLAGS = $(OPT_FLAGS) $(THREAD_FLAG)
 
 #Uncomment line below if X Windows isn't installed on your system.
 #FLAGS = $(OPT_FLAGS) -DNO_GRAPHICS
