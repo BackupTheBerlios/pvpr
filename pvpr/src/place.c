@@ -1,6 +1,7 @@
 /*#include <stdlib.h> */
 #include <stdio.h>
 #include <math.h>
+#include <pthread.h>
 #include "util.h"
 #include "vpr_types.h"
 #include "globals.h"
@@ -13,6 +14,7 @@
 #include "path_delay.h"
 #include "timing_place_lookup.h"
 #include "timing_place.h"
+
 
 
 /************** Types and defines local to place.c ***************************/

@@ -98,6 +98,6 @@ int my_atoi (const char *str);
 void my_srandom (int seed);
 void fill_rand_buf (unsigned int rand_buf[], int *first_rand);
 int p_my_irand (struct pcontext *context, int imax);
-int p_my_frand (struct pcontext *context);
+float p_my_frand (struct pcontext *context);
 int my_irand (int imax);
 float my_frand (void);
