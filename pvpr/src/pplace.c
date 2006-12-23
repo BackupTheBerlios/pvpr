@@ -1058,9 +1058,9 @@ void alloc_context (struct pcontext *context, float update_freq,
 	float inverse_prev_bb_cost, float inverse_prev_timing_cost,
 	struct s_annealing_sched *annealing_sched, struct s_placer_opts *placer_opts,
 	float *net_cost, float *temp_net_cost, float cost, float bb_cost,
-	float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list, float d_max, float place_delay_value, float crit_exponent, int *pins_on_block)
+	float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list, float d_max, float place_delay_value, float crit_exponent, int *pins_on_block, struct s_bb *bb_coords, struct s_bb *bb_num_on_edges)
 {
-	int i, j, *index;
+	int i, j, k, *index;
 	int num_pins;
 	
 	/*
@@ -1176,7 +1176,7 @@ void alloc_context (struct pcontext *context, float update_freq,
 
 }
 
-void restore_context (struct pcontext *context, float *cost, float *bb_cost, float *timing_cost, float *delay_cost, float *rlim, int *pins_on_block, float *net_cost, float *temp_net_cost)
+void restore_context (struct pcontext *context, float *cost, float *bb_cost, float *timing_cost, float *delay_cost, float *rlim, int *pins_on_block, float *net_cost, float *temp_net_cost, struct s_bb *bb_coords, struct s_bb *bb_num_on_edges)
 {
 	int i, j, *index;
 	int num_pins;
@@ -1203,8 +1203,6 @@ void restore_context (struct pcontext *context, float *cost, float *bb_cost, flo
 	}
 	*/	
 	
-float *cost, float *bb_cost, float *timing_cost, float *delay_cost, float *rlim, int *pins_on_block, float *net_cost, float *temp_net_cost
-	
 	*cost = context->cost;
 	*bb_cost = context->bb_cost;
 	*timing_cost = context->timing_cost;
@@ -1212,7 +1210,6 @@ float *cost, float *bb_cost, float *timing_cost, float *delay_cost, float *rlim,
 	*rlim = context->rlim;
 	
 	for (i=0; i<num_blocks; i++) {
-		pins_on_block[i] = context->pins_on_block[i];
 		block[i].x = context->block[i].x;
 		block[i].y = context->block[i].y;
 		for (j=0; j<pins_per_clb; j++) {
