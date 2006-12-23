@@ -26,7 +26,7 @@ struct pcontext {
 	float cost, timing_cost, bb_cost, delay_cost;
 	float new_bb_cost, new_timing_cost;
 	
-	float delay_cost, new_delay_cost,  place_delay_value;
+	float delay_cost, new_delay_cost, place_delay_value;
 	float oldt;
 
 	float inverse_prev_bb_cost, inverse_prev_timing_cost;
@@ -44,7 +44,7 @@ struct pcontext {
 	struct s_placer_opts *placer_opts;
 	
 	int inet, outer_crit_iter_count, inner_crit_iter_count, inner_recompute_limit;
-}
+};
 
 void *parallel_place (void *);
 void free_context(struct pcontext *context);
@@ -56,3 +56,7 @@ void alloc_context (struct pcontext *context, float update_freq,
 	float timing_cost, float delay_cost, float rlim);
 void copy_context (struct pcontext *, struct pcontext *, int);
 void merge_contexts (void *ptr);
+
+void fill_rand_buf (unsigned int rand_buf[], int *first_rand);
+int p_my_irand (struct pcontext *context, int imax);
+float p_my_frand (struct pcontext *context);

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "pplace.h"
 #include "util.h"
 #include "vpr_types.h"
 #include "globals.h"
