@@ -728,7 +728,7 @@ static int ptry_swap (struct pcontext *context) {
 			update_bb (context, inet, &(context->bb_coord_new[bb_index]), &(context->bb_edge_new[bb_index]), x_to, y_to, x_from, y_from);      
 	}
 
-	if (place_cost_type != NONLINEAR_CONG) {
+	if (context->placer_opts->place_cost_type != NONLINEAR_CONG) {
 		context->temp_net_cost[inet] = get_net_cost (inet, &(context->bb_coord_new[bb_index]));
 		bb_delta_c += context->temp_net_cost[inet] - context->net_cost[inet];
 	}
@@ -739,13 +739,13 @@ static int ptry_swap (struct pcontext *context) {
 	delta_c = bb_delta_c;
 
  
-	keep_switch = assess_swap (delta_c, t); 
+	keep_switch = assess_swap (context, delta_c, context->t); 
 
  /* 1 -> move accepted, 0 -> rejected. */ 
 
 	if (keep_switch) {
-		*(context->cost) = *(context->cost) + delta_c;    
-    *(context->bb_cost) = *(context->bb_cost) + bb_delta_c;
+		context->cost = context->cost + delta_c;    
+    context->bb_cost = context->bb_cost + bb_delta_c;
 
 
  /* update net cost functions and reset flags. */
@@ -873,7 +873,7 @@ void *parallel_place (void *arg) {
 		run_for *= context->update_freq;
 	}
 	
-	while (exit_crit(context->t, context->cost, *annealing_sched) == 0) {
+	while (exit_crit(context->t, context->cost, *(context->annealing_sched)) == 0) {
 		context->av_cost = 0.;
 		context->av_bb_cost = 0.;
 		context->av_delay_cost = 0.;
