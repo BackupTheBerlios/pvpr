@@ -20,11 +20,11 @@ static int ptry_swap (struct pcontext *context);
 static void find_to (int x_from, int y_from, int type, float rlim, int *x_to, int *y_to);
 static int find_affected_nets (struct pcontext *context, int b_from, int b_to, int num_of_pins);
 static void get_non_updateable_bb (struct pcontext *context, int inet);
-static void update_bb (int inet, struct s_bb *bb_coord_new, struct s_bb *bb_edge_new, int xold, int yold, int xnew, int ynew);
-static void get_bb_from_scratch (int inet, struct s_bb *coords, struct s_bb *num_on_edges);
-static int assess_swap (float delta_c, float t);
+static void update_bb (struct pcontext *context, int inet, struct s_bb *bb_coord_new, struct s_bb *bb_edge_new, int xold, int yold, int xnew, int ynew);
+static void get_bb_from_scratch (struct pcontext *context, int inet, struct s_bb *coords, struct s_bb *num_on_edges);
+static int assess_swap (struct pcontext *context, float delta_c, float t);
 
-static int assess_swap (float delta_c, float t) {
+static int assess_swap (struct pcontext *context, float delta_c, float t) {
 
 /* Returns: 1 -> move accepted, 0 -> rejected. */ 
 
@@ -44,7 +44,7 @@ static int assess_swap (float delta_c, float t) {
 	if (t == 0.) 
 		return(0);
 
-	fnum = p_my_frand();
+	fnum = p_my_frand(context);
 	prob_fac = exp(-delta_c/t);
 	if (prob_fac > fnum) {
 		accept = 1;
@@ -55,7 +55,7 @@ static int assess_swap (float delta_c, float t) {
 	return(accept);
 }
 
-static void get_bb_from_scratch (int inet, struct s_bb *coords, struct s_bb *num_on_edges) {
+static void get_bb_from_scratch (struct pcontext *context, int inet, struct s_bb *coords, struct s_bb *num_on_edges) {
 
 /* This routine finds the bounding box of each net from scratch (i.e.    *
  * from only the block location information).  It updates both the       *
@@ -71,13 +71,13 @@ static void get_bb_from_scratch (int inet, struct s_bb *coords, struct s_bb *num
  * more than once, in order to get a proper count of the number on the edge *
  * of the bounding box.                                                     */
 
-	if (duplicate_pins[inet] == 0) {
+	if (context->duplicate_pins[inet] == 0) {
 		plist = net[inet].blocks;
 		n_pins = net[inet].num_pins;
 	}
 	else {
-		plist = unique_pin_list[inet];
-		n_pins = net[inet].num_pins - duplicate_pins[inet];
+		plist = context->unique_pin_list[inet];
+		n_pins = net[inet].num_pins - context->duplicate_pins[inet];
 	}
 
 	x = context->block[plist[0]].x;
@@ -156,7 +156,7 @@ static void get_bb_from_scratch (int inet, struct s_bb *coords, struct s_bb *num
 	num_on_edges->ymax = ymax_edge;
 }
 
-static void update_bb (int inet, struct s_bb *bb_coord_new, struct s_bb *bb_edge_new, int xold, int yold, int xnew, int ynew) {
+static void update_bb (struct pcontext *context, int inet, struct s_bb *bb_coord_new, struct s_bb *bb_edge_new, int xold, int yold, int xnew, int ynew) {
 
 /* Updates the bounding box of a net by storing its coordinates in    *
  * the bb_coord_new data structure and the number of blocks on each   *
@@ -184,7 +184,7 @@ static void update_bb (int inet, struct s_bb *bb_coord_new, struct s_bb *bb_edge
 
 		if (xold == context->bb_coords[inet].xmax) {     /* Old position at xmax. */
 				if (context->bb_num_on_edges[inet].xmax == 1) {
-					get_bb_from_scratch (inet, bb_coord_new, bb_edge_new);
+					get_bb_from_scratch (context, inet, bb_coord_new, bb_edge_new);
 					return;
 				}
 				else {
@@ -218,7 +218,7 @@ static void update_bb (int inet, struct s_bb *bb_coord_new, struct s_bb *bb_edge
 
 		if (xold == context->bb_coords[inet].xmin) {   /* Old position at xmin. */
 			if (context->bb_num_on_edges[inet].xmin == 1) {
-					get_bb_from_scratch (inet, bb_coord_new, bb_edge_new);
+					get_bb_from_scratch (context, inet, bb_coord_new, bb_edge_new);
 					return;
 			}
 			else {
@@ -262,7 +262,7 @@ static void update_bb (int inet, struct s_bb *bb_coord_new, struct s_bb *bb_edge
 
 		if (yold == context->bb_coords[inet].ymax) {    /* Old position at ymax. */
 			if (context->bb_num_on_edges[inet].ymax == 1) {
-				get_bb_from_scratch (inet, bb_coord_new, bb_edge_new);
+				get_bb_from_scratch (context, inet, bb_coord_new, bb_edge_new);
 				return;
 			}
 			else {
@@ -296,7 +296,7 @@ static void update_bb (int inet, struct s_bb *bb_coord_new, struct s_bb *bb_edge
  
 		if (yold == context->bb_coords[inet].ymin) {   /* Old position at ymin. */
 			if (context->bb_num_on_edges[inet].ymin == 1) {
-				get_bb_from_scratch (inet, bb_coord_new, bb_edge_new);
+				get_bb_from_scratch (context, inet, bb_coord_new, bb_edge_new);
 				return;
 			}
 			else {
@@ -718,9 +718,9 @@ static int ptry_swap (struct pcontext *context) {
 	}
 	else {
 		if (context->net_block_moved[k] == FROM) 
-			update_bb (inet, &(context->bb_coord_new[bb_index]), &(context->bb_edge_new[bb_index]), x_to, y_to, x_from, y_from);      
+			update_bb (context, inet, &(context->bb_coord_new[bb_index]), &(context->bb_edge_new[bb_index]), x_to, y_to, x_from, y_from);      
 		else
-			update_bb (inet, &(context->bb_coord_new[bb_index]), &(context->bb_edge_new[bb_index]), x_to, y_to, x_from, y_from);      
+			update_bb (context, inet, &(context->bb_coord_new[bb_index]), &(context->bb_edge_new[bb_index]), x_to, y_to, x_from, y_from);      
 	}
 
 	if (place_cost_type != NONLINEAR_CONG) {
@@ -1043,7 +1043,7 @@ void copy_context (struct pcontext *arr, struct pcontext *context, int n) {
  }
 }
 
-void alloc_context (struct pcontext *context, float update_freq, float inverse_prev_bb_cost, float inverse_prev_timing_cost, struct s_annealing_sched *annealing_sched, struct s_placer_opts *placer_opts, float *net_cost, float *temp_net_cost, float update_freq, float cost, float bb_cost, float timing_cost, float delay_cost, float rlim)
+void alloc_context (struct pcontext *context, float update_freq, float inverse_prev_bb_cost, float inverse_prev_timing_cost, struct s_annealing_sched *annealing_sched, struct s_placer_opts *placer_opts, float *net_cost, float *temp_net_cost, float update_freq, float cost, float bb_cost, float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list)
 {
 	int i, j, *index;
 	int num_pins;
@@ -1051,7 +1051,6 @@ void alloc_context (struct pcontext *context, float update_freq, float inverse_p
 	/*
 	context->net = (struct s_net *) my_malloc (num_nets*sizeof(struct s_net));
 	assert(context->net);
-
 	for (i=0; i<num_nets; i++) {
 		context->net[i].name = (char *) my_malloc (strlen(net[i].name)*sizeof(char));
 		assert(context->net[i].name);
@@ -1069,6 +1068,8 @@ void alloc_context (struct pcontext *context, float update_freq, float inverse_p
 		}
 	}
 	*/
+	context->unique_pin_list = unique_pin_list;
+	context->duplicate_pins = duplicate_pins;
 	context->rlim = rlim;
 	context->cost = cost;
 	context->bb_cost = bb_cost;

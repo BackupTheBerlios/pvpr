@@ -43,7 +43,7 @@ struct pcontext {
 	
 	int *duplicate_pins;
 	
-	int **unique_pin_list
+	int **unique_pin_list;
 	
 	struct s_placer_opts *placer_opts;
 	

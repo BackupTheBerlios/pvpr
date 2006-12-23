@@ -40,6 +40,10 @@ enum cost_methods {NORMAL, CHECK};
 
 #define EMPTY -1      
 
+pthread_t *threads;
+struct pcontext *contexts;
+barrier_t barrier;
+
 /********************** Variables local to place.c ***************************/
 
 /* [0..num_nets-1]  0 if net never connects to the same block more than  *
@@ -331,7 +335,7 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
  threads = (pthread_t *) my_malloc(sizeof(pthread_t)*num_threads);
  contexts = (struct pcontext *) my_malloc(sizeof(struct pcontext) * num_threads);
  for (i=0; i<num_threads; i++) {
-	 alloc_context(&(contexts[i]), update_freq, inverse_prev_bb_cost, inverse_prev_timing_cost, &annealing_sched, &placer_opts, net_cost, temp_net_cost, cost, bb_cost, timing_cost, delay_cost, rlim);
+	 alloc_context(&(contexts[i]), update_freq, inverse_prev_bb_cost, inverse_prev_timing_cost, &annealing_sched, &placer_opts, net_cost, temp_net_cost, cost, bb_cost, timing_cost, delay_cost, rlim, duplicate_pins, unique_pin_list);
  }
  
  barrier_init(&barrier, num_threads);
@@ -348,7 +352,7 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
  restore_context(&(contexts[0]), &cost, &bb_cost, &timing_cost, &delay_cost, &rlim, pins_on_block, net_cost, temp_net_cost);
  
  for (i=0; i<num_threads; i++) {
-   free_context(contexts[i]);
+   free_context(&(contexts[i]));
  }
 
  t = 0;   /* freeze out */
