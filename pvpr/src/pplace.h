@@ -44,7 +44,7 @@ struct pcontext {
 	struct s_placer_opts *placer_opts;
 	
 	int inet, outer_crit_iter_count, inner_crit_iter_count, inner_recompute_limit;
-};
+}
 
 void *parallel_place (void *);
 void free_context(struct pcontext *context);
