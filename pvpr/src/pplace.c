@@ -18,13 +18,14 @@
 #define FROM 0      /* What block connected to a net has moved? */
 #define TO 1
 #define FROM_AND_TO 2
-#define EMPTY -1      
+#define EMPTY -1
+#define SMALL_NET 4
 
 static float recompute_bb_cost (struct pcontext *, int, int);
 static int ptry_swap (struct pcontext *context);
 static void find_to (struct pcontext *context, int x_from, int y_from, int type, float rlim, int *x_to, int *y_to);
 static int find_affected_nets (struct pcontext *context, int b_from, int b_to, int num_of_pins);
-static void get_non_updateable_bb (struct pcontext *context, int inet);
+static void get_non_updateable_bb (struct pcontext *context, int inet, struct s_bb *bb_coord_new);
 static void update_bb (struct pcontext *context, int inet, struct s_bb *bb_coord_new, struct s_bb *bb_edge_new, int xold, int yold, int xnew, int ynew);
 static void get_bb_from_scratch (struct pcontext *context, int inet, struct s_bb *coords, struct s_bb *num_on_edges);
 static int assess_swap (struct pcontext *context, float delta_c, float t);
@@ -337,7 +338,7 @@ static void update_bb (struct pcontext *context, int inet, struct s_bb *bb_coord
 	}
 }
 
-static void get_non_updateable_bb (struct pcontext *context, int inet) {
+static void get_non_updateable_bb (struct pcontext *context, int inet, struct s_bb *bb_coord_new) {
 
 /* Finds the bounding box of a net and stores its coordinates in the  *
  * bb_coord_new data structure.  This routine should only be called   *
@@ -384,10 +385,10 @@ static void get_non_updateable_bb (struct pcontext *context, int inet) {
   * clip to 1 in both directions as well (since minimum channel index *
   * is 0).  See route.c for a channel diagram.                        */
  
-	context->bb_coord_new->xmin = max(min(xmin,nx),1);
-	context->bb_coord_new->ymin = max(min(ymin,ny),1);
-	context->bb_coord_new->xmax = max(min(xmax,nx),1);
-	context->bb_coord_new->ymax = max(min(ymax,ny),1);
+	bb_coord_new->xmin = max(min(xmin,nx),1);
+	bb_coord_new->ymin = max(min(ymin,ny),1);
+	bb_coord_new->xmax = max(min(xmax,nx),1);
+	bb_coord_new->ymax = max(min(ymax,ny),1);
 }
 
 static int find_affected_nets (struct pcontext *context, int b_from, int b_to, int num_of_pins) {
@@ -702,10 +703,9 @@ static int ptry_swap (struct pcontext *context) {
 	bb_delta_c = 0;
 	timing_delta_c = 0;
 
-	num_of_pins = pins_on_block[context->block[b_from].type];    
+	num_of_pins = context->pins_on_block[context->block[b_from].type];    
 
-	num_nets_affected = find_affected_nets (nets_to_update, net_block_moved, 
-     b_from, b_to, num_of_pins);
+	num_nets_affected = find_affected_nets (context, b_from, b_to, num_of_pins);
 
 	bb_index = 0;               /* Index of new bounding box. */
 
@@ -719,7 +719,7 @@ static int ptry_swap (struct pcontext *context) {
 		continue;
 
 	if (net[inet].num_pins <= SMALL_NET) {
-		get_non_updateable_bb (inet, &bb_coord_new[bb_index]);
+		get_non_updateable_bb (context, inet, &(context->bb_coord_new[bb_index]));
 	}
 	else {
 		if (context->net_block_moved[k] == FROM) 
