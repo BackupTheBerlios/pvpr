@@ -15,9 +15,14 @@
 #include "timing_place_lookup.h"
 #include "timing_place.h"
 
+#define FROM 0      /* What block connected to a net has moved? */
+#define TO 1
+#define FROM_AND_TO 2
+#define EMPTY -1      
+
 static float recompute_bb_cost (struct pcontext *, int, int);
 static int ptry_swap (struct pcontext *context);
-static void find_to (int x_from, int y_from, int type, float rlim, int *x_to, int *y_to);
+static void find_to (struct pcontext *context, int x_from, int y_from, int type, float rlim, int *x_to, int *y_to);
 static int find_affected_nets (struct pcontext *context, int b_from, int b_to, int num_of_pins);
 static void get_non_updateable_bb (struct pcontext *context, int inet);
 static void update_bb (struct pcontext *context, int inet, struct s_bb *bb_coord_new, struct s_bb *bb_edge_new, int xold, int yold, int xnew, int ynew);
@@ -278,7 +283,7 @@ static void update_bb (struct pcontext *context, int inet, struct s_bb *bb_coord
 /* Now do the ymin fields for coordinates and number of edges. */
  
 		if (ynew < context->bb_coords[inet].ymin) {    /* Moved past ymin */
-			context->bb_coord_new[bb_index].ymin = ynew;
+			bb_coord_new->ymin = ynew;
 			bb_edge_new->ymin = 1;
 		}     
 		else if (ynew == context->bb_coords[inet].ymin) {   /* Moved to ymin */
@@ -300,7 +305,7 @@ static void update_bb (struct pcontext *context, int inet, struct s_bb *bb_coord
 				return;
 			}
 			else {
-				context->bb_edge_new[bb_index].ymin = context->bb_num_on_edges[inet].ymin - 1;
+				bb_edge_new->ymin = context->bb_num_on_edges[inet].ymin - 1;
 				bb_coord_new->ymin = context->bb_coords[inet].ymin;
 			}
 		}     
@@ -455,7 +460,7 @@ static int find_affected_nets (struct pcontext *context, int b_from, int b_to, i
 	return (affected_index);
 }
 
-static void find_to (int x_from, int y_from, int type, float rlim, int *x_to, int *y_to) {
+static void find_to (struct pcontext *context, int x_from, int y_from, int type, float rlim, int *x_to, int *y_to) {
 
  /* Returns the point to which I want to swap, properly range limited. *
   * rlim must always be between 1 and nx (inclusive) for this routine  *
@@ -646,7 +651,7 @@ static int ptry_swap (struct pcontext *context) {
 
 	x_from = context->block[b_from].x;
 	y_from = block[b_from].y;
-	find_to (x_from, y_from, context->block[b_from].type, context->rlim, &x_to, &y_to);
+	find_to (context, x_from, y_from, context->block[b_from].type, context->rlim, &x_to, &y_to);
 
 /* Make the switch in order to make computing the new bounding *
  * box simpler.  If the cost increase is too high, switch them *
