@@ -957,12 +957,13 @@ void *parallel_place (void *arg) {
 #endif
 
 		iters++;
-		if (context->update_freq >= 1 && iters % context->update_freq == 0) {
+		if (context->update_freq < 1) {
 			barrier_wait_run(&barrier, &merge_contexts, (void *)contexts);
 		}
-		else if (context->update_freq < 1) {
+		else if (context->update_freq >= 1 && iters % (int)(context->update_freq) == 0) {
 			barrier_wait_run(&barrier, &merge_contexts, (void *)contexts);
 		}
+
 
 	}
 	barrier_wait_run(&barrier, &merge_contexts, (void *)contexts);

@@ -40,10 +40,6 @@ enum cost_methods {NORMAL, CHECK};
 
 #define EMPTY -1      
 
-pthread_t *threads;
-struct pcontext *contexts;
-barrier_t barrier;
-
 /********************** Variables local to place.c ***************************/
 
 /* [0..num_nets-1]  0 if net never connects to the same block more than  *

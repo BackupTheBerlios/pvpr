@@ -1,5 +1,10 @@
 extern int num_threads;
-extern int update_freq;
+extern float update_freq;
+/*
+extern pthread_t *threads;
+extern struct pcontext *contexts;
+extern barrier_t barrier;
+*/
 
 /* Netlist to be placed stuff. */
 extern int num_nets, num_blocks;     

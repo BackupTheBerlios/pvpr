@@ -1,6 +1,10 @@
 #define BUFSIZE 300
 #define RAND_BUF_SIZE 32
 
+pthread_t *threads;
+struct pcontext *contexts;
+barrier_t barrier;
+
 struct pcontext {
 	struct s_clb **clb;
 //	struct s_net *net;

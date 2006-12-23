@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "util.h"
+#include "barrier.h"
 #include "pplace.h"
 #include "vpr_types.h"
 #include "globals.h"

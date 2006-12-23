@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include "util.h"
+#include "barrier.h"
 #include "pplace.h"
 
 /* This file contains utility functions widely used in *
