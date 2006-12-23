@@ -331,7 +331,7 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
  threads = (pthread_t *) my_malloc(sizeof(pthread_t)*num_threads);
  contexts = (struct pcontext *) my_malloc(sizeof(struct pcontext) * num_threads);
  for (i=0; i<num_threads; i++) {
-	 alloc_context(&(contexts[i]), update_freq, inverse_prev_bb_cost, inverse_prev_timing_cost, &annealing_sched, &placer_opts, net_cost, temp_net_cost, cost, bb_cost, timing_cost, delay_cost, rlim, duplicate_pins, unique_pin_list, d_max, place_delay_value, crit_exponent, pins_on_block);
+	 alloc_context(&(contexts[i]), update_freq, inverse_prev_bb_cost, inverse_prev_timing_cost, &annealing_sched, &placer_opts, net_cost, temp_net_cost, cost, bb_cost, timing_cost, delay_cost, rlim, duplicate_pins, unique_pin_list, d_max, place_delay_value, crit_exponent, pins_on_block, bb_coords, bb_num_on_edges);
  }
  
  barrier_init(&barrier, num_threads);
@@ -345,7 +345,7 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
    pthread_join(threads[i], NULL);
  }
  
- restore_context(&(contexts[0]), &cost, &bb_cost, &timing_cost, &delay_cost, &rlim, pins_on_block, net_cost, temp_net_cost);
+ restore_context(&(contexts[0]), &cost, &bb_cost, &timing_cost, &delay_cost, &rlim, pins_on_block, net_cost, temp_net_cost, bb_coords, bb_num_on_edges);
  
  for (i=0; i<num_threads; i++) {
    free_context(&(contexts[i]));

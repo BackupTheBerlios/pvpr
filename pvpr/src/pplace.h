@@ -58,12 +58,13 @@ struct pcontext {
 
 void *parallel_place (void *);
 void free_context(struct pcontext *context);
-void restore_context(struct pcontext *context, float *cost, float *bb_cost, float *timing_cost, float *delay_cost, float *rlim, int *pins_on_block, float *net_cost, float *temp_net_cost);
+void restore_context(struct pcontext *context, float *cost, float *bb_cost, float *timing_cost, float *delay_cost, float *rlim, int *pins_on_block, float *net_cost, float *temp_net_cost, struct s_bb *bb_coords, struct s_bb *bb_num_on_edges);
 void alloc_context (struct pcontext *context, float update_freq,
 	float inverse_prev_bb_cost, float inverse_prev_timing_cost,
 	struct s_annealing_sched *annealing_sched, struct s_placer_opts *placer_opts,
 	float *net_cost, float *temp_net_cost, float cost, float bb_cost,
-	float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list, float d_max, float place_delay_value, float crit_exponent, int *pins_on_block);
+	float timing_cost, float delay_cost, float rlim, int *duplicate_pins, int **unique_pin_list, float d_max, float place_delay_value, float crit_exponent, int *pins_on_block, struct s_bb *bb_coords, struct s_bb *bb_num_on_edges);
+
 void copy_context (struct pcontext *, struct pcontext *, int);
 void merge_contexts (void *ptr);
 

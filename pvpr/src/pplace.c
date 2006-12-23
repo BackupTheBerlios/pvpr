@@ -1178,7 +1178,7 @@ void alloc_context (struct pcontext *context, float update_freq,
 
 void restore_context (struct pcontext *context, float *cost, float *bb_cost, float *timing_cost, float *delay_cost, float *rlim, int *pins_on_block, float *net_cost, float *temp_net_cost, struct s_bb *bb_coords, struct s_bb *bb_num_on_edges)
 {
-	int i, j, *index;
+	int i, j,k, *index;
 	int num_pins;
 	
 	/*
@@ -1276,7 +1276,8 @@ void free_context (struct pcontext *context)
 	index = context->clb[i][0].u.io_blocks;
 	free(index);
 	
-	free_matrix(context->clb);
+	alloc_matrix (0, nx+1, 0, ny+1, sizeof(struct s_clb));
+	free_matrix(context->clb, 0, nx+1, 0, sizeof(struct s_clb));
 
 	free(context->bb_coords);
 	free(context->bb_num_on_edges);
