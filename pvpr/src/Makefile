@@ -52,7 +52,7 @@ THREAD_FLAG = -lpthread
 
 #FLAGS = $(WARN_FLAGS)
 #FLAGS = $(DEBUG_FLAGS) 
-FLAGS = $(OPT_FLAGS) $(THREAD_FLAG)
+FLAGS = $(OPT_FLAGS) $(THREAD_FLAG) $(DEBUG_FLAGS)
 
 #Uncomment line below if X Windows isn't installed on your system.
 #FLAGS = $(OPT_FLAGS) -DNO_GRAPHICS
