@@ -1279,8 +1279,10 @@ void free_context (struct pcontext *context)
 	}
 	free(context->block);
 
-	index = context->clb[i][0].u.io_blocks;
-	free(index);
+//	for (i=0; i<=nx+1; i++)
+//		for (j=0; j<ny+1; j++)
+//			free(context->clb[i][0].u.io_blocks;
+//	free(index);
 	
 	alloc_matrix (0, nx+1, 0, ny+1, sizeof(struct s_clb));
 	free_matrix(context->clb, 0, nx+1, 0, sizeof(struct s_clb));
