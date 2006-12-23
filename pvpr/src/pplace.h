@@ -1,3 +1,5 @@
+#include "vpr_types.h"
+
 struct pcontext;
 
 void *parallel_place (void *);
