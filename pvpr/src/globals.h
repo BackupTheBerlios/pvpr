@@ -1,5 +1,5 @@
 extern int num_threads;
-extern float update_freq;
+extern int update_freq;
 
 /* Netlist to be placed stuff. */
 extern int num_nets, num_blocks;     

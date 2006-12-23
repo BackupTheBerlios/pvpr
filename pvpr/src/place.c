@@ -342,13 +342,13 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
  parallel_place((void *) &(contexts[0]));
  
  for (i=1; i<num_threads; i++) {
-   pthread_join(&threads[i], NULL);
+   pthread_join(threads[i], NULL);
  }
  
  restore_context(&(contexts[0]), &cost, &bb_cost, &timing_cost, &delay_cost, &rlim, pins_on_block, net_cost, temp_net_cost);
  
  for (i=0; i<num_threads; i++) {
-   free_context(contexts[i]);
+   free_context(&(contexts[i]));
  }
 
  t = 0;   /* freeze out */
