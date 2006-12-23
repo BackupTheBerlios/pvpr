@@ -1222,7 +1222,7 @@ void restore_context (struct pcontext *context, float *cost, float *bb_cost, flo
 	}
 	
 	for (i=0; i<=nx+1; i++) {
-		for (j=0; i<=ny+1; j++) {
+		for (j=0; j<=ny+1; j++) {
 			clb[i][j].occ = context->clb[i][j].occ;
 			clb[i][j].u.block = context->clb[i][j].u.block;
 			clb[i][j].type = context->clb[i][j].type;
