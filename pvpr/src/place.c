@@ -2780,25 +2780,6 @@ static void check_place (float bb_cost, float timing_cost, int place_cost_type,
     error++;
  }
 
- if (place_algorithm == NET_TIMING_DRIVEN_PLACE ||
-     place_algorithm == PATH_TIMING_DRIVEN_PLACE) {
-   comp_td_costs(&timing_cost_check, &delay_cost_check);
-   printf("timing_cost recomputed from scratch is %g. \n", timing_cost_check);
-   if (fabs(timing_cost_check - timing_cost) > timing_cost * ERROR_TOL) {
-     printf("Error:  timing_cost_check: %g and timing_cost: "
-	    "%g differ in check_place.\n",
-	    timing_cost_check,timing_cost);
-     error++;
-   }
-   printf("delay_cost recomputed from scratch is %g. \n", delay_cost_check);
-   if (fabs(delay_cost_check - delay_cost) > delay_cost * ERROR_TOL) {
-     printf("Error:  delay_cost_check: %g and delay_cost: "
-	    "%g differ in check_place.\n",
-	    delay_cost_check,delay_cost);
-     error++;
-   }
- }
-
  bdone = (int *) my_malloc (num_blocks*sizeof(int));
  for (i=0;i<num_blocks;i++) bdone[i] = 0;
 
