@@ -1001,6 +1001,7 @@ void copy_context (struct pcontext *arr, struct pcontext *context, int n) {
 	for (i=0; i<=nx+1; i++) {
 		for (j=0; i<=ny+1; j++) {
 			printf("%d %d\n",i,j);
+			fflush();
 			arr[cont].clb[i][j].type = context->clb[i][j].type;
 			arr[cont].clb[i][j].occ = context->clb[i][j].occ;
 			arr[cont].clb[i][j].u.block = context->clb[i][j].u.block;
