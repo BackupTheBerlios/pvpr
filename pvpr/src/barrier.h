@@ -11,7 +11,7 @@ typedef struct {
 } barrier_t;
 
 void barrier_init(barrier_t *, int);
-void barrier_wait_run(barrier_t *, void (*run_func)(void *), void *arg);
+void barrier_wait_run(barrier_t *, void * (*run_func)(void *), void *arg);
 void barrier_wait(barrier_t *);
 
 #endif
