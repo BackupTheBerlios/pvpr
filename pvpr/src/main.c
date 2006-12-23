@@ -141,8 +141,8 @@ int main (int argc, char *argv[]) {
  t_chan_width_dist chan_width_dist;
  float constant_net_delay;
 
- num_threads = 4;
- update_freq = 1;
+ num_threads = 8;
+ update_freq = 1.;
  printf("%s",title);
 
  placer_opts.pad_loc_file = pad_loc_file;
