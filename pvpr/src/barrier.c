@@ -8,7 +8,7 @@ void barrier_init(barrier_t *barrier, int nthreads) {
 	barrier->arrived = 0;
 }
 
-void barrier_wait_run(barrier_t *, void (*run_func)(void *), void *arg) {
+void barrier_wait_run(barrier_t *barrier, void (*run_func)(void *), void *arg) {
 	
 	pthread_mutex_lock(&barrier->mutex);
 	
