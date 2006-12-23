@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #include <pthread.h>
 #include "util.h"
 #include "barrier.h"
