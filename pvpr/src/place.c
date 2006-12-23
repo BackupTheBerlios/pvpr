@@ -3,6 +3,7 @@
 #include <math.h>
 #include <pthread.h>
 #include "util.h"
+#include "barrier.h"
 #include "vpr_types.h"
 #include "globals.h"
 #include "pplace.h"
@@ -38,6 +39,10 @@ enum cost_methods {NORMAL, CHECK};
 #define MAX_MOVES_BEFORE_RECOMPUTE 1000000
 
 #define EMPTY -1      
+
+pthread_t *threads;
+struct pcontext *contexts;
+barrier_t barrier;
 
 /********************** Variables local to place.c ***************************/
 
@@ -220,7 +225,7 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
  * determines which cost function is used.  num_regions is used only     *
  * the place_cost_type is NONLINEAR_CONG.                                */
 
-
+ int i;
  int tot_iter, inner_iter, success_sum, pins_on_block[3];
  int move_lim, moves_since_cost_recompute, width_fac;
  float t,  success_rat, rlim, d_max, est_crit;
@@ -341,13 +346,13 @@ void try_place (struct s_placer_opts placer_opts,struct s_annealing_sched
  parallel_place((void *) &(contexts[0]));
  
  for (i=1; i<num_threads; i++) {
-   pthread_join(&threads[i], NULL);
+   pthread_join(threads[i], NULL);
  }
  
  restore_context(&(contexts[0]), &cost, &bb_cost, &timing_cost, &delay_cost, &rlim, pins_on_block, net_cost, temp_net_cost);
  
  for (i=0; i<num_threads; i++) {
-   free_context(contexts[i]);
+   free_context(&(contexts[i]));
  }
 
  t = 0;   /* freeze out */

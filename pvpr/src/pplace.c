@@ -1,8 +1,19 @@
-#include "place.h"
-#include "pplace.h"
-#include "globals.h"
+#include <stdio.h>
+#include <math.h>
+#include <pthread.h>
 #include "util.h"
+#include "barrier.h"
 #include "vpr_types.h"
+#include "globals.h"
+#include "pplace.h"
+#include "place.h"
+#include "read_place.h"
+#include "draw.h"
+#include "place_and_route.h"
+#include "net_delay.h"
+#include "path_delay.h"
+#include "timing_place_lookup.h"
+#include "timing_place.h"
 
 static float recompute_bb_cost (struct pcontext *, int, int);
 static int ptry_swap (struct pcontext *context);

@@ -1,6 +1,4 @@
-pthread_t *threads;
-struct pcontext *contexts;
-barrier_t barrier;
+#include <pthread.h>
 
 static const float cross_count[50] = {   /* [0..49] */
 1.0,    1.0,    1.0,    1.0828, 1.1536, 1.2206, 1.2823, 1.3385, 1.3991, 1.4493,

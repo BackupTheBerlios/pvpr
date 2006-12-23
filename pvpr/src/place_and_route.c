@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "util.h"
+#include "barrier.h"
 #include "vpr_types.h"
 #include "globals.h"
 #include "place_and_route.h"

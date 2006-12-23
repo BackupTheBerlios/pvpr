@@ -26,7 +26,7 @@ struct pcontext {
 	float cost, timing_cost, bb_cost, delay_cost;
 	float new_bb_cost, new_timing_cost;
 	
-	float delay_cost, new_delay_cost, place_delay_value;
+	float new_delay_cost, place_delay_value;
 	float oldt;
 
 	float inverse_prev_bb_cost, inverse_prev_timing_cost;
