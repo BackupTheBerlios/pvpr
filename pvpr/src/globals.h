@@ -1,3 +1,5 @@
+extern int num_threads;
+
 /* Netlist to be placed stuff. */
 extern int num_nets, num_blocks;     
 extern int num_p_inputs, num_p_outputs, num_clbs, num_globals;

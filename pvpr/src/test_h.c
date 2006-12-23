@@ -11,7 +11,11 @@
 #include "graphics.h"
 #include "hash.h"
 #include "heapsort.h"
+#ifndef SEQ
 #include "place.h"
+#else
+#include "place_orig.h"
+#endif
 #include "place_and_route.h"
 #include "read_arch.h"
 #include "read_netlist.h"

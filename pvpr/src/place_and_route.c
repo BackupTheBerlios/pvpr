@@ -3,7 +3,13 @@
 #include "vpr_types.h"
 #include "globals.h"
 #include "place_and_route.h"
+
+#ifndef SEQ
 #include "place.h"
+#else
+#include "place_orig.h"
+#endif
+
 #include "read_place.h"
 #include "route_export.h"
 #include "draw.h"

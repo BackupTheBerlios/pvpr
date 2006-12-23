@@ -1,16 +1,29 @@
+#define RAND_BUF_SIZE 32
+#define BUFSIZE 300
+
 struct pcontext {
 	struct s_clb **clb;
 //	struct s_net *net;
 	struct s_block *block;
 	
+	struct s_bb *bb_coord_new;
+	struct s_bb *bb_edge_new;
+	
+	int *nets_to_update, *net_block_moved;
+	
+	unsigned int rand_buf[RAND_BUF_SIZE];
+	int first_rand;
+	
 	struct s_bb *bb_coords, *bb_num_on_edges;
 	
-	static float *net_cost, *temp_net_cost;
+	float *net_cost, *temp_net_cost;
+	
+	char msg[BUFSIZE];
 	
 	int tot_iter, success_sum, move_lim, moves_since_cost_recompute;
 	
 	float t, success_rat, rlim;
-	float cost, timing_cost, bb_cost;
+	float cost, timing_cost, bb_cost, delay_cost;
 	float new_bb_cost, new_timing_cost;
 	
 	float delay_cost, new_delay_cost,  place_delay_value;
@@ -24,6 +37,8 @@ struct pcontext {
 	
 	struct s_annealing_sched *annealing_sched;
 	
+	float update_freq;
+	
 	int *pins_on_block;
 	
 	struct s_placer_opts *placer_opts;
@@ -32,5 +47,8 @@ struct pcontext {
 }
 
 void *parallel_place (void *);
-void alloc_context (struct pcontext *);
-void copy_context (struct pcontext *, struct pcontext, int);
+void free_context(struct pcontext *context);
+void restore_context(struct pcontext *context, float *cost, float *bb_cost, float *timing_cost, float *delay_cost, float *rlim, int *pins_on_block, float *net_cost, float *temp_net_cost);
+void alloc_context (struct pcontext *context, float update_freq, float inverse_prev_bb_cost, float inverse_prev_timing_cost, struct s_annealing_sched *annealing_sched, struct s_placer_opts *placer_opts, float *net_cost, float *temp_net_cost, float update_freq, float cost, float bb_cost, float timing_cost, float delay_cost, float rlim);
+void copy_context (struct pcontext *, struct pcontext *, int);
+void merge_contexts (void *ptr);

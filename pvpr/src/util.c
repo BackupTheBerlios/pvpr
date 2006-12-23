@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include "util.h"
 
 /* This file contains utility functions widely used in *
@@ -508,15 +509,73 @@ void free_matrix3 (void *vptr, int nrmin, int nrmax, int ncmin, int ncmax,
 #define IC 12345u
 #define IM 2147483648u
 #define CHECK_RAND 
+#define RAND_BUF_SIZE 32
 
 static unsigned int current_random = 0;
+static pthread_mutex_t rand_lock;
 
-
+void init_rand_mutex() {
+	pthread_mutex_init(&rand_lock, NULL);
+}
+	
 void my_srandom (int seed) {
-
  current_random = (unsigned int) seed;
 }
 
+void fill_rand_buf (unsigned int rand_buf[], int &first_rand) {
+	int i;
+	pthread_mutex_lock(&rand_lock);
+	for (i=0; i<RAND_BUF_SIZE; i++) {
+		current_random = current_random * IA + IC;
+		rand_buf[i] = current_random;
+	}
+	pthread_mutex_unlock(&rand_lock);
+	
+	*first_rand = 0;
+}
+
+float my_frand (struct pcontext *context) {
+ 
+/* Creates a random float between 0 and 1.  i.e. [0..1).        */ 
+ 
+	float fval;
+	int ival;
+
+	if (context->first_rand >= RAND_BUF_SIZE) {
+		fill_rand_buf (context->rand_buf, &(context->first_rand));
+	}
+
+	ival = context->rand_buf[context->first_rand] & (IM - 1);  /* Modulus */
+	fval = (float) ival / (float) IM;
+
+#ifdef CHECK_RAND
+ if ((fval < 0) || (fval > 1.)) {
+    printf("Bad value in my_frand, fval = %g\n",fval);
+    exit(1);
+ }
+#endif
+	context->first_rand += 1;
+	return(fval);
+}
+
+int p_my_irand (struct pcontext *context, int imax) {
+	int ival;
+	
+	if (context->first_rand >= RAND_BUF_SIZE) {
+		fill_rand_buf (context->rand_buf, &(context->first_rand));
+	}
+	ival = context->rand_buf[context->first_rand] & (IM - 1);
+	ival = (int) ((float) ival * (float) (imax + 0.999) / (float) IM);
+		
+#ifdef CHECK_RAND
+ if ((ival < 0) || (ival > imax)) {
+    printf("Bad value in my_irand, imax = %d  ival = %d\n",imax,ival);
+    exit(1);
+ }
+#endif
+	context->first_rand += 1;
+	return (ival);
+}
 
 int my_irand (int imax) {
 
