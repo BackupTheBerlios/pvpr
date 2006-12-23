@@ -20,6 +20,8 @@
 #define FROM_AND_TO 2
 #define EMPTY -1
 #define SMALL_NET 4
+#define ERROR_TOL .001
+#define MAX_MOVES_BEFORE_RECOMPUTE 1000000
 
 static float recompute_bb_cost (struct pcontext *, int, int);
 static int ptry_swap (struct pcontext *context);
@@ -908,7 +910,7 @@ void *parallel_place (void *arg) {
 			}
 			context->bb_cost = context->new_bb_cost;
 
-			if (placer_opts->place_algorithm == BOUNDING_BOX_PLACE) {
+			if (context->placer_opts->place_algorithm == BOUNDING_BOX_PLACE) {
 				context->cost = context->new_bb_cost;
 			}
 			context->moves_since_cost_recompute = 0;
@@ -930,15 +932,17 @@ void *parallel_place (void *arg) {
 		}
 		context->std_dev = get_std_dev (context->success_sum, context->sum_of_squares, context->av_cost);
 
+/*
 #ifndef SPEC
     printf("%11.5g  %10.6g %11.6g  %11.6g  %11.6g %11.6g %11.4g %9.4g %8.3g  %7.4g  %7.4g  %10d  ",context->t, context->av_cost, 
 	   context->av_bb_cost, context->av_timing_cost, context->av_delay_cost, place_delay_value, d_max, context->success_rat, context->std_dev, 
 	   context->rlim, crit_exponent,context->tot_iter);
 #endif
+*/
 
 		context->oldt = context->t;  /* for finding and printing alpha. */
 
-		update_t (&(context->t), context->std_dev, context->rlim, context->success_rat, context->annealing_sched);
+		update_t (&(context->t), context->std_dev, context->rlim, context->success_rat, *(context->annealing_sched));
 
 #ifndef SPEC
     printf("%7.4g\n",context->t/context->oldt);
